@@ -1,0 +1,12 @@
+insert into Heap
+
+delete from Heap
+
+insert into Sorted
+
+delete from Sorted
+
+insert into Hashed
+
+delete from Hashed
+

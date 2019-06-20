@@ -1,0 +1,18 @@
+How big is a FieldDesc?
+
+8KB pages
+
+Offsets
+=======
+
+max offset = 8KB-1
+
+number of bits to represent all offsets = 13  (2^13=8K)
+
+
+Lengths
+=======
+
+
+Types
+=====

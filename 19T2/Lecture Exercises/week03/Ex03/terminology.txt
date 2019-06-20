@@ -1,0 +1,15 @@
+Record = sequence of bytes stored on disk
+
+Tuple = "interpretable" version of a Record in memory
+
+Page = copy of page from file on disk
+
+PageId = index of Page within file = pid
+
+pageOffset = pid * PAGESIZE
+
+TupleId = index of record within a page = tid
+
+RecordId = (PageId, TupleId) = rid
+
+recOffset = directory[tid]

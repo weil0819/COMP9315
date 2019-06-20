@@ -1,0 +1,59 @@
+Visibility of tuples to PostgreSQL transactions (tx) is
+determined by Transaction, Command and Tuple IDs ...
+
+Each Transaction is allocated a global unique txID
+
+Transaction = sequence of Commands C_1, C_2, C_3
+Command     = one SQL statement
+
+Each Command is allocated a cmdID, unique within current tx
+
+Each tuple contains:
+* xmin = transaction ID of tx that created the tuple
+* xmax = transaction ID of tx that deleted the tuple
+* cmin = command ID of cmd that created the tuple
+* cmax = command ID of cmd that deleted the tuple
+* ctid = Tuple ID of newer version of this tuple
+
+Each command knows:
+* Tc   = transaction ID of current tx
+* Cc   = command ID of current cmd
+
+
+
+
+
+Simplified view of "live" tuples ...
+
+* xmin < Tc && xmax == NULL
+* xmin == Tc && cmin < Cc
+* xmax == Tc && cmax > Cc
+
+Simplified view of "dead" tuples ...
+
+* xmax != NULL && xmax < Tc
+* xmax == Tc && cmax < Cc
+
+
+
+
+
+
+
+More realistic view of tuple visibility includes Command ...
+
+Possible states for tuples:
+
+* visible,  newly-created,  updated,  deleted
+
+
+PostgreSQL recognises that a tuple is deleted ...
+
+* xmax == Tc and cmax < Cc, or
+* xmax < Tc and xmax is committed
+
+PostgreSQL recognises that a tuple is visible ...
+
+* not deleted, and
+  * created by an earlier command in Tc, or
+  * created by an already-committed transaction

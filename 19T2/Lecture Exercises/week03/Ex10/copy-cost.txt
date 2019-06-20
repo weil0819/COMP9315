@@ -1,0 +1,14 @@
+heap -> heap
+
+b_in + b_out, where b_out <= b_in
+
+sorted -> heap
+
+b_in + b_out, where b_out <= b_in
+
+heap -> sorted
+
+b_in + r_in*Cost(insert)   (naive)
+
+Cost(sort(infile)) + b_out    (sensible)
+
