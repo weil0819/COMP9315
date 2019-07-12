@@ -1,0 +1,26 @@
+Consider a table R(x,y,z) using multi-attribute hashing where
+
+d = 9    d[x] = 5    d[y] = 3    d[z] = 1
+
+How many buckets are accessed in answering each of these queries?
+
+select * from R where x = 4 and y = 2 and z = 1
+
+  all bits known => 1 bucket
+
+select * from R where x = 5 and y = 3
+
+  ? unknown bits => ? buckets
+
+select * from R where y = 99
+
+  ? unknown bits => ? buckets
+
+select * from R where z = 23
+
+  ? unknown bits => ? buckets
+
+select * from R where x > 5
+
+  linear scan; hashing no help with Range queries
+

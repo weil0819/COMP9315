@@ -1,0 +1,72 @@
+r=100,000, B=4096
+
+create table Students (
+    id       integer primary key,
+    name     char(10), -- simplified
+    gender   char(1),  -- 'm','f','?'
+    birthday char(5)   -- 'MM-DD'
+);
+
+select * from Students
+where  name='John' and birthday = '04-01'
+
+describe the selectivity of each attribute
+estimate the cost of answering using one index
+estimate the cost of answering using both indices
+
+Size of tuples (bytes):
+sizeof(id)     =
+sizeof(name)   =
+sizeof(gender) =
+sizeof(b'day)  =
+tuple size     =
+
+Size of data file:
+R = ?
+c = ?
+b = ?
+Assume: 96 bytes of header/page
+
+
+Size of index entries:
+
+index entry = sizeof(Key) + tid = x + 4
+indexEntry(id)     =
+indexEntry(name)   =
+indexEntry(gender) =
+indexEntry(b'day)  =
+
+Size of index:
+
+sum(pages/level)
+
+c_i(id)     =
+b_i(id)     =
+c_i(name)   =
+b_i(name)   =
+c_i(gender) =
+b_i(gender) =
+c_i(b'day)  =
+b_i(b'day)  =
+
+
+Selectivity:
+
+id = X ... ?
+name = X ... ?
+gender = X ... ?
+birthday = X ... ?
+
+
+Query:
+select * from Students
+where  name='John' and birthday = '04-01'
+
+Cost using one index ...
+
+
+Query:
+select * from Students
+where  name='John' and birthday = '04-01'
+
+Cost using indexes on name and birthday ...

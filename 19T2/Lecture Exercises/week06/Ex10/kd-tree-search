@@ -1,0 +1,33 @@
+Describe path(s) through the tree in solving
+each of the following:
+
+
+Query: (m,1)
+
+level 1 -> go right
+level 2 -> go left
+level 3 -> go right
+data page ... scan to find (m,1)
+
+
+Query: (a,?)
+
+level 1 -> go left
+level 2 -> go left and right
+level 3 (left) -> go left -> data page
+level 3 (right) -> go left -> data page
+
+
+Query: (?,1)
+
+level 1 -> go left and right
+level 2 (left) -> go left
+	level 3 -> go left and right to data pages
+level 2 (right) -> go left
+	level 3 -> go left and right to data pages
+
+
+Query: (?,?)
+
+scan data pages
+

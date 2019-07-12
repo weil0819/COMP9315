@@ -1,0 +1,21 @@
+Representing:
+
+01000*10**001*101
+
+First possibility:
+
+"01000*10**001*101" (as a string)  (18 bytes)
+
+
+Use 2-bits 00 = 0, 01 = 1, 11 = *
+
+
+
+Representing:
+
+01000*10**001*101
+
+Second possibility:
+
+1000010000010101   real hash bits   (2 bytes)
+0000100110001000   stars            (2 bytes)

@@ -1,0 +1,30 @@
+Describe path(s) through the tree in solving
+each of the following:
+
+
+Query: (m,1)
+
+at level 1, (m,1) fits in (a0,m4)
+at level 2, (m,1) fits in (g0,m2)
+leads to data page
+
+
+Query: (a,?)
+
+at level 1, (a,?) fits in (a0,m4) and (a5,m9)
+(a0,m4) -> (a,?) fits in (a0,f2) and (a3,f4)
+(a0,f2) -> (a,?) fits in (a0,c1) and (a2,c2)
+(a0,c1) -> data page containing (a,1)
+(a2,c2) -> data page but no matching tuples
+(a3,f4) -> data page but no matching tuples
+
+
+Query: (?,1)
+
+?
+
+
+Query: (?,?)
+
+?
+

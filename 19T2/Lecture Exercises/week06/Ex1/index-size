@@ -1,0 +1,19 @@
+B = 8192,   R = 128,   r = 100000
+header in data pages: 256 bytes
+key is integer, data file is sorted on key
+index entries (keyVal,tupleID): 8 bytes
+header in index pages: 32 bytes
+
+How many pages for dense/sparse index?
+
+# tuples/page = c = floor((B-256)/128) = 62
+# data pages = ceil(100000/62) = 1613
+# index entries per page = c_i = floor((B-32)/8) = 1020
+
+Dense:
+# index entries = r = 100000
+# index pages = ceil(100000/1020) = 99
+
+Sparse:
+# index entries = b = 1613
+# index pages = ceil(1613/1020) = 2

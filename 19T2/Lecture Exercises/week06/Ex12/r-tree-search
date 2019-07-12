@@ -1,0 +1,23 @@
+Describe path(s) through the tree in solving
+each of the following:
+
+
+Q1: select * from Rel where X='a' and Y=4
+
+?
+
+
+Q2: select * from Rel where X='i' and Y=6
+
+?
+
+
+Q3: select * from Rel where 'c'≤X≤'j' and Y=5
+
+?
+
+
+Q4: select * from Rel where X='c'
+
+?
+
