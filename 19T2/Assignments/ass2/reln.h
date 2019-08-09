@@ -17,7 +17,6 @@ Status newRelation(char *name, Count nattr, Count npages, Count d, char *cv);
 Reln openRelation(char *name, char *mode);
 void closeRelation(Reln r);
 Bool existsRelation(char *name);
-// Modify the following function.
 PageID addToRelation(Reln r, Tuple t);
 FILE *dataFile(Reln r);
 FILE *ovflowFile(Reln r);
