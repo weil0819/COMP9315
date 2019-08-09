@@ -15,4 +15,7 @@ Query startQuery(Reln, char *);
 Tuple getNextTuple(Query);
 void closeQuery(Query);
 
+// Add new function.
+int checkQuery(Reln, char *);
+
 #endif
