@@ -1,0 +1,39 @@
+Estimate sizes of join results for ...
+
+1. select * from R, S where R.s = S.id
+
+   (where S.id is a primary key
+    and R.s is a foreign key referencing S.id)
+
+Max size = r_R
+ when no tuples in R have R.s is null
+
+Min size = 0 
+ when all tuples in R have R.s is null
+
+
+2. select * from R, S where R.s <> S.id
+
+   (where S.id is a primary key
+    and R.s is a foreign key referencing S.id)
+
+Max size ~= r_R * (r_S-1)
+ when no tuples in R have R.s is null
+
+Min size = 0
+ when all tuples in R have R.s is null
+
+
+3. select * from R, S where R.x = S.y
+
+   (where R.x and S.y have no connection
+    except that dom(R.x)=dom(S.y), e.g. integer)
+
+Min size = 0
+ when V(x,R) INT V(y,S) = Empty
+
+Max size = r_R * r_S
+ when |V(x,R)| == |V(y,S)| == 1 and V(x,R) == v(y,S)
+ (very unlikely)
+
+

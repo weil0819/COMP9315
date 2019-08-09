@@ -1,0 +1,33 @@
+r = 1000,   V(A,R) = 10,   V(B,R) = 100
+
+Estimate selectivity of:
+
+
+1. select * from R where not A=k
+
+A=k likelihood 1/10  => a<>k likelihood 9/10
+
+alternatively
+
+Prob(A=k) = 0.1 
+Prob(A<>k) = 1 - Prob(A=k) = 0.9
+
+#tuples in result (A<>k) = 9/10 * 1000 = 900
+#tuples in result (A=k) = 1/10 * 1000 = 100
+
+
+2. select * from R where A=k and B=j
+
+#tuples(Tmp = sel[A=k](R)) = 1000/10 = 100
+#tuples(sel[B=j](Tmp)) = 100/100 = 1
+
+alternatively
+
+Prob(A=k) = 0.1
+Prob(B=j) = 0.01
+Prob(A=k and B=j) = Prob(A=k) * Prob(B=j) = 0.001
+
+
+3. select * from R where A in (k,l,m,n)
+
+A in (k,l,m,n) likelhood = 4/10 * 1000 = 400

@@ -15,7 +15,10 @@ typedef char *Tuple;
 
 int tupLength(Tuple t);
 Tuple readTuple(Reln r, FILE *in);
+
+// Modify the following function to use the relevant bits from each attribute hash value to form a composite hash
 Bits tupleHash(Reln r, Tuple t);
+
 void tupleVals(Tuple t, char **vals);
 void freeVals(char **vals, int nattrs);
 Bool tupleMatch(Reln r, Tuple t1, Tuple t2);

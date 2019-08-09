@@ -1,0 +1,42 @@
+(Students join Enrol) join (Courses join Staff)
+
+(Students join (Enrol join (Course join Staff)))
+
+(Students join ((Enrol join Course) join Staff))
+
+(((Students join Enrol) join Course) join Staff)
+
+BUT NOT
+
+(Students join Staff) join (Courses join Enrol)
+
+Tmp1(sid,sname,course,mark)
+    = Students join[sid=student] Enrol
+Tmp2(sid,sname,code,term,lic,mark)
+    = Tmp1 join[cid=course] Courses
+Tmp3(sid,sname,code,term,fname,mark)
+    = Tmp2 join[lic=fid] Staff
+Res(code,sid,sname,mark)
+    = Sel[term='11s2' & fname='JS'](Tmp3)
+
+Tmp1(fid,fname)
+    = Sel[fname='JS'](Staff)
+Tmp2(cid,code,lic)
+    = Sel[term='11s2'](Courses)
+Tmp3(cid,code)
+    = Tmp1 Join[fid=lic] Tmp2
+Tmp4(student,code,mark)
+    = Tmp3 Join[cid=course] Enrolments
+Res(code,sid,sname,mark)
+    = Tmp4 Join[student=sid] Student
+
+Tmp1
+    = Students Join Enrol
+Tmp2
+    = Courses Join Staff
+Tmp3
+    = Tmp1 Join Tmp2
+Tmp4
+    = Sel[fname='JS' && term='11s2']Tmp3
+Res
+    = ...

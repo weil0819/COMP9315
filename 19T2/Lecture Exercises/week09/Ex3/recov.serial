@@ -1,0 +1,43 @@
+Recoverable:
+a schedule is recoverable if each tx commits
+only after each tx from which it has read commits
+
+Serializable:
+a schedule is serializable if it is equivalent
+to some serial schedule (assume conflict-serializable)
+
+
+Recoverable and serializable:
+
+T1:  W(A)  W(B)       C
+T2:              W(A)    R(B)  C
+
+
+Recoverable and not serializable:
+
+T1:        W(A)  W(B)  C
+T2:  W(A)                 R(B)  C
+
+
+Not recoverable and serializable:
+
+T1:  W(A)  W(B)                 C
+T2:              W(A)  R(B)  C
+
+or
+
+T1:  W(A)  W(B)              C
+T2:              W(A)  R(B)     C
+
+
+ACR:
+
+T1:  W(A)  W(B)        C
+T2:              W(A)     R(B)  C
+
+or
+
+T1:  W(A)  W(B)  C
+T2:                 W(A)  R(B)  C
+
+Both are recoverable and serializable.

@@ -1,0 +1,26 @@
+Consider the two transactions:
+
+T1:  W(A)  W(B)  C
+T2:  W(A)  R(B)  C
+
+Recoverable:
+* all tx's Ti that wrote values used by Tj
+* must have committed before Tj commits
+
+
+A schedule which is recoverable and serializable
+
+T1:  W(A)  W(B)              C
+T2:              W(A)  R(B)     C
+
+
+A schedule which is recoverable but not serializable
+
+T1:        W(A)  W(B)        C
+T2:  W(A)              R(B)     C
+
+
+A schedule which is serializable but not recoverable
+
+T1:  W(A)  W(B)                 C
+T2:              W(A)  R(B)  C

@@ -1,0 +1,128 @@
+(A) Consider the schedule:
+
+T1:        W(B)  W(A)
+T2:  R(B)                    W(A)
+T3:                    R(A)        W(A)
+
+
+Conflict Equivalence
+====================
+
+Check precedence graph ...
+
+conflict on B between T1 and T2: T2 --> T1
+conflict on A between T1 and T3: T1 --> T3
+conflict on A between T2 and T3: T3 --> T2
+conflict on A between T2 and T3: T2 --> T3
+
+This graph has a cycle T1 --> T3 --> T2 --> T1
+so the schedule is not conflict serializable
+
+Also, a simpler cycle T3 --> T2 --> T3
+
+
+T1:        W(B)  W(A)
+T2:  R(B)                    W(A)
+T3:                    R(A)        W(A)
+
+
+View Equivalence
+================
+
+For each shared object:
+- determine first reader
+- determine last writer
+- determine which version is read by each Ti
+
+S1 ...
+T1:        W(B)  W(A)
+T2:  R(B)                    W(A)
+T3:                    R(A)        W(A)
+
+is view-equivalent to
+
+S2 ...
+T1:              W(B)  W(A)
+T2:  R(B)  W(A)
+T3:                          R(A)  W(A)
+
+which is obviously a serial schedule
+
+"Proof" of view equivalence:
+
+S1 ...
+B first reader T2, last writer T1
+A first reader T3, last writer T3, T3 reads T1's A
+
+S2 ...
+B first reader T2, last writer T1
+A first reader T3, last writer T3, T3 reads T1's A
+
+
+
+
+
+(B) Consider the schedule:
+
+T1:        W(B)  W(A)
+T2:  R(B)              W(A)
+T3:                          R(A)  W(A)
+
+Conflict Equavalence
+====================
+
+Check precedence graph ...
+
+* there is a conflict between T1 and T2 on B with T2 --> T1
+* there is a conflict between T1 and T2 on A with T1 --> T2
+
+This graph has a cycle T1 --> T2 --> T1
+so the schedule is not conflict serializable
+
+
+
+View Equivalence
+================
+
+For each shared object:
+- determine first reader (which tx reads initial value)
+- determine last writer (which tx writes the last value)
+- determine which version is read by each Ti
+
+S1 ...
+
+T1:        W(B)  W(A)
+T2:  R(B)              W(A)
+T3:                          R(A)  W(A)
+
+For B, first reader is T2, last writer is T1
+For A, first reader is T3, last writer is T3
+       T3 reads the value of A written by T1
+
+
+There are six possible serial schedules
+
+T1T2T3, T1T3T2, T2T1T3, T2T3T1, T3T1T2, T3T2T1
+
+The only schedules that have the property
+   T3 reads the value of A written by T2
+are those where T2 comes before T3
+i.e. T1T2T3, T2T3T1 
+
+Of these, the only schedules that have the property
+   last writer of A is T3
+are T1T2T3
+
+This schedule also has the property
+   first reader of A is T3
+
+T1T2T3 is not view equivalent because
+   T2 reads the version of B produced by T1
+whereas in schedule S1
+   T2 reads the initial value of B
+
+Thus, there is no serial schedule that has all of
+the same read/write properties for shared variables
+as S1 does
+=> S1 is not view-equivalent to any serial schedule
+=> S1 is not view serializable

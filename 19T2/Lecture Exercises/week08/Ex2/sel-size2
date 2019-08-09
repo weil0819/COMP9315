@@ -1,0 +1,17 @@
+r = 500,   V(X,R) = 5,  a,b,c,d,e,NULL ~ 40:20:10:10:10:10
+
+Estimate cost for ...
+
+1. select * from R where X is not null
+
+90% are not null = 450 tuples
+
+
+2. select * from R where X >= 'c'
+
+30% satisfy condition => 150 tuples
+
+
+3. select * from R where X between 'b' and 'd'
+
+40% satisfy condition => 200 tuples

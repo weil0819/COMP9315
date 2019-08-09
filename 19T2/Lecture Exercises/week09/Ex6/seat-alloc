@@ -1,0 +1,69 @@
+Need to ensure that no "conflicting" access to the
+SeatAlloc table happens.
+
+The possible conflict:
+* two tx's read simultaneously and both find the seat empty
+* both then proceed to give the same seat to two different pax's
+
+We need to ensure that only one tx at a time can access SeatAlloc.
+
+One way:
+
+LOCK TABLE SeatAlloc
+- gives exclusive access to the SeatAlloc table
+- solves problem, but locks out updates on all other flights
+
+Would be nice to be able to only lock attempts to allocate
+seats for this flight or even better just lock concurrent
+attempts on this seat.
+
+A better way:
+
+SELECT ... FOR UPDATE
+- gives exclusive access to the seat allocation in question
+
+
+First approach ...
+
+create or replace function
+    allocSeat(paxID int, fltID int, seat text) returns boolean
+as $$
+declare
+    pid int;
+begin
+    SELECT paxID into pid from SeatingAlloc
+    where  flightID = fltID and seatNum = seat;
+    if (pid is null) then
+        update SeatingAlloc set pax = paxID
+        where  flightID = fltID and seatNum = seat;
+    end if;
+	return (pid is null);
+end;
+$$ language plpgsql;
+
+BEGIN;
+LOCK TABLE SeatAlloc;
+select allocSeat(...)
+COMMIT;
+
+
+Second approach ...
+
+create or replace function
+    allocSeat(paxID int, fltID int, seat text) returns boolean
+as $$
+declare
+    avail boolean;
+begin
+    SELECT count(*)=1 into avail from SeatsAvail
+    where  flightID = fltID and seatNum = seat
+	FOR UPDATE;
+    if (avail) then
+        update SeatingAlloc set pax = paxID
+        where  flightID = fltID and seatNum = seat;
+		-- COMMIT;
+    end if;
+	return avail;
+end;
+$$ language plpgsql;
+

@@ -1,0 +1,31 @@
+T1:  R(A)        W(C)                                W(D)
+T2:        R(B)                          W(C)
+T3:                    R(D)        W(B)
+T4:                          R(E)              W(A)
+
+All locks are granted until w3(B). Now, T3 has to wait for T2,
+which has a shared lock on B, and the waits-for graph is
+
+     T3 ----> T2
+
+At the next step, T2 must wait for T1, which has a lock on C.
+The waits-for graph is:
+
+     T3 ----> T2 ----> T1
+
+Next, w4(A) causes T4 to wait for T1. There is still no cycle,
+and the waits-for graph is:
+
+     T3 ----> T2 ----> T1 <---- T4
+
+Finally, T1 tries to write D. It cannot get the exclusive lock on D
+that it needs, because T3 holds a shared lock on D. If we allowed T1
+to wait, the graph would be:
+
+     T3 ----> T2 ----> T1 <---- T4
+      ^                 |
+      |_________________|
+
+Thus, T1 must abort and relinquish its locks. At that time,
+T2 and T4 can each get the locks they need.
+When T2 finishes, T3 can proceed. 

@@ -1,0 +1,90 @@
+#!/bin/sh -x
+
+SRVR=/srvr/$USER
+TSTDIR=$SRVR/testing
+PGDIR=$SRVR/pgsql
+SRCDIR=$SRVR/postgresql-11.3/src
+DB="email-test"
+source $SRVR/env
+
+OUT=$TSTDIR/testing.out
+echo "" > $OUT
+
+# clean up old database
+if [ -f "$PGDIR/data/.s.PGSQL.5432" ]
+then
+	pg_ctl stop
+fi
+
+# clean up old code in tutorial directory
+cd $SRCDIR/tutorial/
+if [ ! -f email.c ]
+then
+	echo "Error: No email.c file in $SRCDIR/tutorial/"
+	exit 1
+fi
+if [ ! -f email.source ]
+then
+	echo "Error: No email.source file in $SRCDIR/tutorial/"
+	exit 1
+fi
+
+echo >> $OUT
+echo === Cleaning src/tutorial directory before make === >> $OUT
+echo >> $OUT
+make clean >> $OUT 2>&1
+
+echo >> $OUT
+echo === Contents of src/tutorial directory before make === >> $OUT
+echo >> $OUT
+ls -l email.* >> $OUT
+
+echo >> $OUT
+echo === Making email.o and email.sql === >> $OUT
+echo >> $OUT
+make >> $OUT 2>&1
+
+echo >> $OUT
+echo === Starting PostgreSQL server === >> $OUT
+echo >> $OUT
+rm -f $TSTDIR/pg_log
+pg_ctl start -l $TSTDIR/pg_log >> $OUT 2>&1
+sleep 3
+
+echo >> $OUT
+echo === Checking PostgreSQL server === >> $OUT
+echo >> $OUT
+psql -l >> $OUT 2>&1
+dropdb --if-exists $DB >> $OUT 2>&1
+
+echo >> $OUT
+echo === Creating database === >> $OUT
+echo >> $OUT
+echo "(no output means no errors)" >> $OUT
+echo >> $OUT
+createdb $DB >> $OUT
+echo >> $OUT
+echo === Loading Email type === >> $OUT
+echo >> $OUT
+psql $DB -f email.sql >> $OUT 2>&1
+echo >> $OUT
+echo === Loading schema === >> $OUT
+echo >> $OUT
+psql $DB -e -f $TSTDIR/schema.sql >> $OUT 2>&1
+echo >> $OUT
+echo === Loading data === >> $OUT
+echo >> $OUT
+/usr/bin/time psql $DB -f $TSTDIR/email.data >> $OUT 2>&1
+echo >> $OUT
+echo === Checking file sizes === >> $OUT
+echo >> $OUT
+php $TSTDIR/check.php "$DB" "$PGDIR/data/base" >> $OUT 2>&1
+echo >> $OUT
+echo === Running tests === >> $OUT
+echo >> $OUT
+psql $DB -e -f $TSTDIR/queries1.sql >> $OUT 2>&1
+echo >> $OUT
+echo === Running more tests === >> $OUT
+echo >> $OUT
+psql $DB -e -f $TSTDIR/queries2.sql >> $OUT 2>&1
+psql $DB -e -f $TSTDIR/queries3.sql >> $OUT 2>&1

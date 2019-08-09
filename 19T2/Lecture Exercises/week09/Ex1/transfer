@@ -1,0 +1,81 @@
+The transaction can be expressed as:
+
+T: B R(X) R(X) W(X) R(Y) W(Y) C
+
+To simplify the example, assume read-for-update exists
+
+T: B R(X) W(X) R(Y) W(Y) C
+
+Assume T1 = transfer(1,2,100), T2 = transfer(1,2,200)
+Initially Accounts(1,x,500), Accounts(2,y,200)
+Finally   Accounts(1,x,200), Accounts(2,y,500)
+
+
+Serial execution of transfers could be ...
+
+T1: B R(X) W(X) R(Y) W(Y) C
+T2:                         B R(X) W(X) R(Y) W(Y) C
+
+(1)   500  400  200  300
+(2)                           400  200  300  500
+
+Finally  Accounts(1,x,200), Accounts(2,y,500)
+
+
+
+
+T1 = transfer(1,2,100), T2 = transfer(1,2,200)
+
+One concurrent execution of transfers ...
+
+T1: B   R(X) W(X)           R(Y) W(Y) C
+T2:   B           R(X) W(X)             R(Y) W(Y) C
+
+(1)     500  400            200  300
+(2)               400  200              300  500
+
+Finally  Accounts(1,x,200), Accounts(2,y,500)
+
+
+
+
+T1 = transfer(1,2,100), T2 = transfer(1,2,200)
+
+Another concurrent execution of transfers ...
+
+T1: B   R(X)      W(X)      R(Y)      W(Y)        C
+T2:   B      R(X)      W(X)      R(Y)      W(Y) C
+
+(1)     500       400       200       300
+(2)          500       300       200       400
+
+Finally  Accounts(1,x,300), Accounts(2,y,400)
+
+
+
+
+T1 = transfer(1,2,100), T2 = transfer(1,2,200)
+
+Another concurrent execution of transfers ...
+
+T1: B   R(X)      W(X)      R(Y) W(Y)             C
+T2:   B      R(X)      W(X)           R(Y) W(Y) C
+
+(1)     500       400       200  300
+(2)          500       300            300  500
+
+Finally  Accounts(1,x,300), Accounts(2,y,500)
+
+
+
+T1 = transfer(1,2,100), T2 = transfer(1,2,200)
+
+Another concurrent execution of transfers ...
+
+T1: B   R(X)           W(X)      R(Y) W(Y)      C
+T2:   B      R(X) W(X)      R(Y)           W(Y)   C
+
+(1)     500            400       200  300
+(2)          500  300       200            400
+
+Finally Accounts(1,x,400), Accounts(2,y,400)

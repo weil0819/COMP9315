@@ -1,0 +1,62 @@
+Consider n transactions:
+
+T1, T2, ... Tn
+
+How many possible serial schedules are there?
+
+Some possible schedules:
+
+T1 T2 ... Tn
+Tn ... T2 T1
+T2 T1 ... Tn
+
+So, the question is, how many different orderings?
+
+# possible schedules = n!
+
+
+
+Consider 2 transactions:
+
+Ta: R(X) R(Y) W(X) W(Y)
+Tb: R(Y) W(Y) R(X) W(X)
+
+The objects don't matter in counting schedules.
+The order of operations does matter.
+
+Rename the ops as:
+
+Ta: a1 a2 a3 a4
+Tb: b1 b2 b3 b4
+
+Some possible schedules:
+
+a1 a2 a3 a4 b1 b2 b3 b4
+b1 b2 b3 b4 a1 a2 a3 a4
+a1 b1 a2 b2 a3 b3 a4 b4
+b1 a1 b2 a2 b3 a3 b4 a4
+etc. etc.
+
+At each step:
+* we have a "current" op
+* we have two choices for "next" op
+  - "next" op in this tx
+  - "next" op in other tx
+
+So ...
+* initially no "current" op
+* "next" op in Ta is a1, "next" op in Tb is b1
+* choose either a1 or b1
+* if first op is a1, second op is either a2 or b1
+* if first op is b1, second op is either a1 or b2
+* etc. etc.
+
+There are 8 ops overall.
+The first 7 each have two choices.
+The last has only one choice (the remaining op).
+
+Number of schedules: 2^7
+
+Left as an exercise ...
+
+Number of schedules for k tx's, each with n ops

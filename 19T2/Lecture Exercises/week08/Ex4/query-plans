@@ -1,0 +1,29 @@
+1. select max(birthday) from People
+
+sequential scan, with aggregate checking max
+
+
+2. select max(id) from People
+
+id is a pk => have Btree index
+scan index to find right-most key
+
+
+3. select family from People order by family
+
+merge sort, invoked by sequential scan of People
+
+
+4. select distinct p.id, pname 
+   from   People s, CourseEnrolments e 
+   where  s.id=e.student and e.grade='FL'
+
+nested loop join
+  outer relation is Sel[e.grade='FL']
+  inner relation is People
+
+OR
+
+index nested loop join
+  outer relation is Sel[e.grade='FL']
+  inner relation is Sel[s.id=e.student] using Btree
